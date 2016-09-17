@@ -1,5 +1,5 @@
 ## Needs to be done
-
+* Clean up events, it's kind of wierd at the moment
 
 ## Is done
 

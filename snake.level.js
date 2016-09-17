@@ -1,5 +1,8 @@
 // Kardo Jõeleht 2016
 SNAKE.Level = function(settings) {
+	var level = this;
+
+	this.controls = settings.controls;
 	this.drawContext = settings.drawContext;
 	this.height = settings.height;
 	this.initialPartCount = 3;
@@ -13,8 +16,6 @@ SNAKE.Level = function(settings) {
 	this.spaceBetweenParts = 1;
 	this.started = false;
 	this.width = settings.width;
-
-	var level = this;
 
 	this.start = function() {
 		if (!this.started) {
@@ -43,19 +44,47 @@ SNAKE.Level = function(settings) {
 		var totalLength =
 				this.snakePartSide * this.initialPartCount +
 				(this.initialPartCount-1) * this.spaceBetweenParts;
-		var x = this.midX - totalLength/2; // Start from the left and distribute evenly
+		var x = this.midX + totalLength/2; // Start from the right and distribute evenly
 		for (var i = 0; i < this.initialPartCount; i++) {
 			var part = new SNAKE.SnakePart(this.snakePartSide, x, this.midY);
 			this.snake.push(part);
-			x += this.snakePartSide + this.spaceBetweenParts; // Parts one pixel apart
+			x -= this.snakePartSide + this.spaceBetweenParts; // Parts one pixel apart
 		}
 	};
 
 	this.move = function() {
 		// Moves the snake by one step
+		var oldPosition;
+		var previousPosition;
 		for (var i in this.snake) {
-			this.snake[i].x += this.moveStep;
+			oldPosition = {
+				x: this.snake[i].x,
+				y: this.snake[i].y
+			};
+			if (i == 0) {
+				// Set new head location according to direction
+				var headPosition = this.controls.getHeadPosition(
+													this.snake[i].x,
+													this.snake[i].y,
+													this.snakePartSide + this.spaceBetweenParts
+												 );
+				this.snake[i].x = headPosition.x;
+				this.snake[i].y = headPosition.y;
+			} else {
+				// Move all other parts to previous' part's position
+				this.snake[i].x = previousPosition.x;
+				this.snake[i].y = previousPosition.y;
+			}
+			previousPosition = {
+				x: oldPosition.x,
+				y: oldPosition.y
+			};
 		}
+	};
+
+	this.reverseSnake = function() {
+		this.snake.reverse();
+		console.log('direction reversed');
 	};
 
 	this.draw = function() {

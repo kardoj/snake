@@ -22,6 +22,12 @@ SNAKE.Events = function() {
 		SNAKE.level.start();
 	});
 
+	window.addEventListener('keyup', function(e) {
+		if ([37, 38, 39, 40].indexOf(e.which) != -1) {
+			SNAKE.controls.setMoveDirection(e.which);
+		}
+	});
+
 	window.addEventListener('resize', function() {
 		console.log('resizing');
 		SNAKE.setRenderDimensions();

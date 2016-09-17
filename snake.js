@@ -29,10 +29,12 @@ SNAKE = {
 
 	setupModules: function() {
 		this.events = new SNAKE.Events();
+		this.controls = new SNAKE.Controls();
 		this.level = new SNAKE.Level({
 			drawContext: this.drawContext,
 			height: this.height,
-			width: this.width
+			width: this.width,
+			controls: this.controls
 		});
 	},
 
