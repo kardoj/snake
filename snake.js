@@ -8,8 +8,8 @@ var SNAKE = SNAKE || {};
 SNAKE = {
 	canvas: null,
 	drawContext: null,
-	width: 0,
-	height: 0,
+	width: 1920,
+	height: 1080,
 	events: null,
 	level: null,
 
@@ -20,7 +20,7 @@ SNAKE = {
 	setup: function() {
 		this.setupPageStyles();
 		this.setupCanvas();
-		this.setDimensions();
+		this.setRenderDimensions();
 		this.setupModules();
 		//this.events.openStartScreen();
 		this.events.startLevel();
@@ -41,19 +41,21 @@ SNAKE = {
 	},
 
 	setupCanvas: function() {
-		var canvas = document.createElement('canvas');
-		canvas.style.width = window.innerWidth + 'px';
-		canvas.width = window.innerWidth;
-		canvas.style.height = window.innerHeight + 'px';
-		canvas.height = window.innerHeight;
-		document.body.appendChild(canvas);
-		this.drawContext = canvas.getContext('2d');
-		this.canvas = canvas;
+		this.canvas = document.createElement('canvas');
+		this.canvas.width = this.width;
+		this.canvas.height = this.height;
+		document.body.appendChild(this.canvas);
+		this.drawContext = this.canvas.getContext('2d');
 		console.log('canvas generated');
 	},
 
-	setDimensions: function() {
-		this.width = window.innerWidth;
-		this.height = window.innerHeight;
+	setRenderDimensions: function() {
+		if (window.innerWidth / 16 * 10 <= window.innerHeight) {
+			this.canvas.style.width = window.innerWidth + 'px';
+			this.canvas.style.height = window.innerWidth / 16 * 10 + 'px';
+		} else {
+			this.canvas.style.height = window.innerHeight + 'px';
+			this.canvas.style.width = window.innerHeight / 10 * 16 + 'px';
+		}
 	},
 };

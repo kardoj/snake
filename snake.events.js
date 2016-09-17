@@ -23,7 +23,8 @@ SNAKE.Events = function() {
 	});
 
 	window.addEventListener('resize', function() {
-		console.log('drawing');
+		console.log('resizing');
+		SNAKE.setRenderDimensions();
 		SNAKE.level.draw();
 	});
 };

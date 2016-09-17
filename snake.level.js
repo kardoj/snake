@@ -1,8 +1,11 @@
 // Kardo Jõeleht 2016
 SNAKE.Level = function() {
 	var snake = [];
-	var snakePartSide = 30;
+	var snakePartSide = 32;
 	var initialPartCount = 3;
+	var spaceBetweenParts = 1;
+	var midX = SNAKE.width/2;
+	var midY = SNAKE.height/2;
 
 	this.start = function() {
 		console.log('level started');
@@ -11,13 +14,12 @@ SNAKE.Level = function() {
 	};
 
 	this.populateInitialSnake = function() {
-		var totalLength = snakePartSide * initialPartCount + (initialPartCount-1)*1;
-		var x = SNAKE.width/2-totalLength/2; // Start from the left and distribute evenly
-		var midY = SNAKE.height/2; // Middle
+		var totalLength = snakePartSide * initialPartCount + (initialPartCount-1) * spaceBetweenParts;
+		var x = midX - totalLength/2; // Start from the left and distribute evenly
 		for (var i = 0; i < initialPartCount; i++) {
 			var part = new SNAKE.SnakePart(snakePartSide, x, midY);
 			snake.push(part);
-			x += snakePartSide+1; // Parts one pixel apart
+			x += snakePartSide + spaceBetweenParts; // Parts one pixel apart
 		}
 	};
 
