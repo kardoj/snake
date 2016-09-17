@@ -29,14 +29,17 @@ SNAKE = {
 
 	setupModules: function() {
 		this.events = new SNAKE.Events();
-		this.level = new SNAKE.Level();
+		this.level = new SNAKE.Level({
+			drawContext: this.drawContext,
+			height: this.height,
+			width: this.width
+		});
 	},
 
 	setupCanvas: function() {
 		this.canvas = document.createElement('canvas');
 		this.canvas.width = this.width;
 		this.canvas.height = this.height;
-		this.canvas.style.border = '1px solid red';
 		this.container.appendChild(this.canvas);
 		this.drawContext = this.canvas.getContext('2d');
 		console.log('canvas generated');

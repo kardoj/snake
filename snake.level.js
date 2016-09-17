@@ -1,15 +1,19 @@
 // Kardo Jõeleht 2016
-SNAKE.Level = function() {
-	this.snake = [];
-	this.snakePartSide = 32;
+SNAKE.Level = function(settings) {
+	this.drawContext = settings.drawContext;
+	this.height = settings.height;
 	this.initialPartCount = 3;
-	this.spaceBetweenParts = 1;
 	this.midX = SNAKE.width/2;
 	this.midY = SNAKE.height/2;
-	this.started = false;
-	this.moveSpeed = 1000;
-	this.moveStep = this.snakePartSide;
 	this.mover = null;
+	this.moveSpeed = 1000;
+	this.snakePartSide = 32;
+	this.moveStep = this.snakePartSide;
+	this.snake = [];
+	this.spaceBetweenParts = 1;
+	this.started = false;
+	this.width = settings.width;
+
 	var level = this;
 
 	this.start = function() {
@@ -57,13 +61,13 @@ SNAKE.Level = function() {
 	this.draw = function() {
 		level.clear();
 		for (var i in level.snake) {
-			level.snake[i].drawFromCenter(SNAKE.drawContext);
+			level.snake[i].drawFromCenter(level.drawContext);
 		}
 
 		if (level.started) requestAnimationFrame(level.draw);
 	};
 
 	this.clear = function() {
-		SNAKE.drawContext.clearRect(0, 0, SNAKE.width, SNAKE.height);
+		this.drawContext.clearRect(0, 0, this.width, this.height);
 	};
 };
