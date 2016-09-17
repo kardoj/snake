@@ -16,7 +16,7 @@ SNAKE.Level = function() {
 		if (!this.started) {
 			this.started = true;
 			this.setupSnake();
-			this.mover = setInterval(function() { SNAKE.level.move(); }, SNAKE.level.moveSpeed);
+			this.mover = setInterval(function() { level.move(); }, level.moveSpeed);
 			requestAnimationFrame(this.draw);
 			console.log('level started');
 		} else {
