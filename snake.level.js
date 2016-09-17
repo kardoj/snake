@@ -13,16 +13,26 @@ SNAKE.Level = function() {
 	var level = this;
 
 	this.start = function() {
-		this.started = true;
-		this.setupSnake();
-		this.mover = setInterval(function() { SNAKE.level.move(); }, SNAKE.level.moveSpeed);
-		requestAnimationFrame(this.draw);
-		console.log('level started');
+		if (!this.started) {
+			this.started = true;
+			this.setupSnake();
+			this.mover = setInterval(function() { SNAKE.level.move(); }, SNAKE.level.moveSpeed);
+			requestAnimationFrame(this.draw);
+			console.log('level started');
+		} else {
+			console.log('already started');
+		}
 	};
 
 	this.stop = function() {
-		console.log('level stopped');
-		this.started = false;
+		if (this.started) {
+			console.log('level stopped');
+			this.started = false;
+			this.snake = [];
+			clearInterval(this.mover);
+		} else {
+			console.log('not started');
+		}
 	};
 
 	this.setupSnake = function() {
