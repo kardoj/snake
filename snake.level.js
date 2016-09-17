@@ -6,11 +6,20 @@ SNAKE.Level = function() {
 	var spaceBetweenParts = 1;
 	var midX = SNAKE.width/2;
 	var midY = SNAKE.height/2;
+	var redrawDelay = 1000/SNAKE.fps;
+	var started = false;
+	var that = this;
 
 	this.start = function() {
 		console.log('level started');
+		started = true;
 		this.populateInitialSnake();
-		this.draw();
+		requestAnimationFrame(this.draw, redrawDelay);
+	};
+
+	this.stop = function() {
+		console.log('level stopped');
+		started = false;
 	};
 
 	this.populateInitialSnake = function() {
@@ -24,10 +33,12 @@ SNAKE.Level = function() {
 	};
 
 	this.draw = function() {
-		this.clear();
+		that.clear();
 		for (var i in snake) {
 			snake[i].drawFromCenter(SNAKE.drawContext);
 		}
+
+		if (started) requestAnimationFrame(that.draw, redrawDelay);
 	};
 
 	this.clear = function() {
