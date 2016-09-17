@@ -1,5 +1,5 @@
 ## Needs to be done
-* Clean up events, it's kind of wierd at the moment
+* Clean up events, it's kind of weird at the moment
 * Better structure for generating bait and level controller
 * Snake into it's own class, takes up too much of level
 * Change drawing from center to back to left top corner
