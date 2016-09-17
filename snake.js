@@ -12,7 +12,6 @@ SNAKE = {
 	height: 1080,
 	events: null,
 	level: null,
-	fps: 10,
 
 	start: function() {
 		this.setup();

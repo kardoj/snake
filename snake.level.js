@@ -1,44 +1,56 @@
 // Kardo Jõeleht 2016
 SNAKE.Level = function() {
-	var snake = [];
-	var snakePartSide = 32;
-	var initialPartCount = 3;
-	var spaceBetweenParts = 1;
-	var midX = SNAKE.width/2;
-	var midY = SNAKE.height/2;
-	var redrawDelay = 1000/SNAKE.fps;
-	var started = false;
-	var that = this;
+	this.snake = [];
+	this.snakePartSide = 32;
+	this.initialPartCount = 3;
+	this.spaceBetweenParts = 1;
+	this.midX = SNAKE.width/2;
+	this.midY = SNAKE.height/2;
+	this.started = false;
+	this.moveSpeed = 1000;
+	this.moveStep = this.snakePartSide;
+	this.mover = null;
+	var level = this;
 
 	this.start = function() {
+		this.started = true;
+		this.setupSnake();
+		this.mover = setInterval(function() { SNAKE.level.move(); }, SNAKE.level.moveSpeed);
+		requestAnimationFrame(this.draw);
 		console.log('level started');
-		started = true;
-		this.populateInitialSnake();
-		requestAnimationFrame(this.draw, redrawDelay);
 	};
 
 	this.stop = function() {
 		console.log('level stopped');
-		started = false;
+		this.started = false;
 	};
 
-	this.populateInitialSnake = function() {
-		var totalLength = snakePartSide * initialPartCount + (initialPartCount-1) * spaceBetweenParts;
-		var x = midX - totalLength/2; // Start from the left and distribute evenly
-		for (var i = 0; i < initialPartCount; i++) {
-			var part = new SNAKE.SnakePart(snakePartSide, x, midY);
-			snake.push(part);
-			x += snakePartSide + spaceBetweenParts; // Parts one pixel apart
+	this.setupSnake = function() {
+		var totalLength =
+				this.snakePartSide * this.initialPartCount +
+				(this.initialPartCount-1) * this.spaceBetweenParts;
+		var x = this.midX - totalLength/2; // Start from the left and distribute evenly
+		for (var i = 0; i < this.initialPartCount; i++) {
+			var part = new SNAKE.SnakePart(this.snakePartSide, x, this.midY);
+			this.snake.push(part);
+			x += this.snakePartSide + this.spaceBetweenParts; // Parts one pixel apart
+		}
+	};
+
+	this.move = function() {
+		// Moves the snake by one step
+		for (var i in this.snake) {
+			this.snake[i].x += this.moveStep;
 		}
 	};
 
 	this.draw = function() {
-		that.clear();
-		for (var i in snake) {
-			snake[i].drawFromCenter(SNAKE.drawContext);
+		level.clear();
+		for (var i in level.snake) {
+			level.snake[i].drawFromCenter(SNAKE.drawContext);
 		}
 
-		if (started) requestAnimationFrame(that.draw, redrawDelay);
+		if (level.started) requestAnimationFrame(level.draw);
 	};
 
 	this.clear = function() {
