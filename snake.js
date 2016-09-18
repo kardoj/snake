@@ -47,12 +47,14 @@ SNAKE = {
 	},
 
 	setRenderDimensions: function() {
-		if (this.container.offsetWidth / 16 * 10 <= this.container.offsetHeight) {
+		var longer = 16;
+		var shorter = 10;
+		if (this.container.offsetWidth / longer <= this.container.offsetHeight / shorter) {
 			this.canvas.style.width = this.container.offsetWidth + 'px';
-			this.canvas.style.height = this.container.offsetWidth / 16 * 10 + 'px';
+			this.canvas.style.height = this.container.offsetWidth / longer * shorter + 'px';
 		} else {
 			this.canvas.style.height = this.container.offsetHeight + 'px';
-			this.canvas.style.width = this.container.offsetHeight / 10 * 16 + 'px';
+			this.canvas.style.width = this.container.offsetHeight / shorter * longer + 'px';
 		}
-	},
+	}
 };
