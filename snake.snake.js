@@ -27,7 +27,7 @@ SNAKE.Snake = function(screenWidth, screenHeight) {
 
 	this.draw = function(drawContext) {
 		for (var i in this.parts) {
-			this.parts[i].draw(drawContext, this.screenWidth, this.screenHeight);
+			this.parts[i].draw(drawContext);
 		}
 	};
 
@@ -47,12 +47,12 @@ SNAKE.Snake = function(screenWidth, screenHeight) {
 													this.parts[i].y,
 													this.side + this.spaceBetweenParts
 												 );
-				this.parts[i].x = headPosition.x;
-				this.parts[i].y = headPosition.y;
+				this.parts[i].setX(headPosition.x);
+				this.parts[i].setY(headPosition.y);
 			} else {
 				// Move all other parts to previous' part's position
-				this.parts[i].x = previousPosition.x;
-				this.parts[i].y = previousPosition.y;
+				this.parts[i].setX(previousPosition.x);
+				this.parts[i].setY(previousPosition.y);
 			}
 			previousPosition = {
 				x: oldPosition.x,

@@ -4,31 +4,32 @@ SNAKE.SnakePart = function(side, x, y) {
 	this.side = side;
 	this.x = x;
 	this.y = y;
+	this.width = SNAKE.width;
+	this.height = SNAKE.height;
 
-	this.draw = function(context, screenWidth, screenHeight) {
+	this.draw = function(context) {
 		context.fillStyle = this.color;
-		var screenPos = this.positionOnScreen(screenWidth, screenHeight);
 		context.fillRect(
-			screenPos.x,
-			screenPos.y,
+			this.x,
+			this.y,
 		 	this.side,
 			this.side
 		);
 	};
 
-	this.positionOnScreen = function(screenWidth, screenHeight) {
-		var x = (this.x-this.side/2) % screenWidth;
-		var y = (this.y-this.side/2) % screenHeight;
+	this.setX = function(newX) {
+		var x = newX % this.width;
 		if (x < 0) {
-			x = screenWidth + x;
+			x = this.width + x;
 		}
-		if (y < 0) {
-			y = screenHeight + y;
-		}
+		this.x = x;
+	};
 
-		return {
-			x: x,
-			y: y
-		};
+	this.setY = function(newY) {
+		var y = newY % this.height;
+		if (y < 0) {
+			y = this.height + y;
+		}
+		this.y = y;
 	};
 };
