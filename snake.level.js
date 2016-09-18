@@ -1,7 +1,7 @@
 // Kardo Jõeleht 2016
 SNAKE.Level = function(settings) {
 	var level = this;
-	
+
 	this.drawContext = settings.drawContext;
 	this.height = settings.height;
 	this.width = settings.width;
@@ -9,7 +9,6 @@ SNAKE.Level = function(settings) {
 	this.moveSpeed = 300;
 	this.minMoveSpeed = 50;
 	this.reduceSpeedOnBait = 10;
-	this.moveStep = this.snakePartSide;
 	this.baits = [];
 	this.started = false;
 	this.baitSide = 64;
@@ -22,7 +21,7 @@ SNAKE.Level = function(settings) {
 			this.started = true;
 			this.snake = new SNAKE.Snake(this.width, this.height);
 			this.controller = setInterval(function() { level.control(); }, level.controllerTicks);
-			this.mover = setInterval(function() { level.snake.move(); }, level.moveSpeed);
+			this.moveSnake();
 			requestAnimationFrame(this.draw);
 			console.log('level started');
 		} else {
@@ -35,11 +34,23 @@ SNAKE.Level = function(settings) {
 			console.log('level stopped');
 			this.started = false;
 			this.snake = null;
-			clearInterval(this.mover);
+			this.stopSnake();
 			clearInterval(this.controller);
 		} else {
 			console.log('not started');
 		}
+	};
+
+	this.moveSnake = function() {
+		level.mover = setTimeout(function() {
+			level.snake.move();
+			level.moveSnake();
+		}, level.moveSpeed);
+	};
+
+	this.stopSnake = function() {
+		clearTimeout(level.mover);
+		level.mover = null;
 	};
 
 	this.control = function() {
