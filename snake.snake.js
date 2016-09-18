@@ -1,7 +1,7 @@
 // Kardo Jõeleht 2016
 SNAKE.Snake = function(screenWidth, screenHeight) {
 	this.initialPartCount = 3;
-	this.spaceBetweenParts = 3;
+	this.spaceBetweenParts = 0;
 	this.side = 32;
 	this.parts = [];
 	this.screenWidth = screenWidth;
