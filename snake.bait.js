@@ -1,14 +1,15 @@
 // Kardo Jõeleht 2016
-SNAKE.Bait = function(x, y, side) {
+SNAKE.Bait = function(screenWidth, screenHeight, side) {
 	this.color = '#B3FFB3';
 	this.side = side;
-	this.x = x;
-	this.y = y;
+	// New bait with random coordinates
+	this.x = Math.ceil(Math.random() * (screenWidth - this.side));
+	this.y = Math.ceil(Math.random() * (screenHeight - this.side));
 
-	this.drawFromCenter = function(context) {
+	this.draw = function(context) {
 		context.fillStyle = this.color;
 		context.fillRect(
-			this.x-this.side/2, this.y-this.side/2, this.side, this.side
+			this.x, this.y, this.side, this.side
 		);
 	};
 };

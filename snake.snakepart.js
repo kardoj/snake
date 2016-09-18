@@ -5,7 +5,7 @@ SNAKE.SnakePart = function(side, x, y) {
 	this.x = x;
 	this.y = y;
 
-	this.drawFromCenter = function(context, screenWidth, screenHeight) {
+	this.draw = function(context, screenWidth, screenHeight) {
 		context.fillStyle = this.color;
 		var screenPos = this.positionOnScreen(screenWidth, screenHeight);
 		context.fillRect(

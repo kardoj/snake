@@ -54,8 +54,11 @@ SNAKE.Level = function(settings) {
 		}
 		// Check if snake's head hit bait
 		for (var i in level.baits) {
-			var inRangeX = level.snake[0].x >= level.baits[i].x && level.snake[0].x <= level.baits[i].x + level.baitSide;
-			var inRangeY = level.snake[0].y >= level.baits[i].y && level.snake[0].y <= level.baits[i].y + level.baitSide;
+			var inRangeX = level.snake[0].x >= level.baits[i].x &&
+						   level.snake[0].x <= level.baits[i].x + level.baits[i].side;
+			console.log(inRangeX);
+			var inRangeY = level.snake[0].y >= level.baits[i].y &&
+						   level.snake[0].y <= level.baits[i].y + level.baits[i].side;
 			if (inRangeX && inRangeY) {
 				console.log('hit bait');
 				level.baits.pop();
@@ -106,11 +109,7 @@ SNAKE.Level = function(settings) {
 
 	this.generateBait = function() {
 		this.baits.push(
-			new SNAKE.Bait(
-				Math.ceil(Math.random() * this.width) - this.baitSide/2,
-				Math.ceil(Math.random() * this.height) - this.baitSide/2,
-				this.baitSide
-			)
+			new SNAKE.Bait(this.width, this.height, this.baitSide)
 		);
 		console.log('bait generated');
 	};
@@ -119,9 +118,10 @@ SNAKE.Level = function(settings) {
 		var totalLength =
 				this.snakePartSide * this.initialPartCount +
 				(this.initialPartCount-1) * this.spaceBetweenParts;
-		var x = this.midX + totalLength/2; // Start from the right and distribute evenly
+		var x = this.midX + totalLength/2 - this.snakePartSide; // Start from the right and distribute evenly
+		var y = this.midY - this.snakePartSide/2;
 		for (var i = 0; i < this.initialPartCount; i++) {
-			var part = new SNAKE.SnakePart(this.snakePartSide, x, this.midY);
+			var part = new SNAKE.SnakePart(this.snakePartSide, x, y);
 			this.snake.push(part);
 			x -= this.snakePartSide + this.spaceBetweenParts;
 		}
@@ -165,10 +165,10 @@ SNAKE.Level = function(settings) {
 	this.draw = function() {
 		level.clear();
 		for (var i in level.snake) {
-			level.snake[i].drawFromCenter(level.drawContext, level.width, level.height);
+			level.snake[i].draw(level.drawContext, level.width, level.height);
 		}
 		for(i in level.baits) {
-			level.baits[i].drawFromCenter(level.drawContext);
+			level.baits[i].draw(level.drawContext);
 		}
 		if (level.started) requestAnimationFrame(level.draw);
 	};
