@@ -1,14 +1,34 @@
 // Kardo Jõeleht 2016
-SNAKE.SnakePart = function(sidei, xi, yi) {
+SNAKE.SnakePart = function(side, x, y) {
 	this.color = '#ABCDEF';
-	this.side = sidei;
-	this.x = xi;
-	this.y = yi;
+	this.side = side;
+	this.x = x;
+	this.y = y;
 
-	this.drawFromCenter = function(context) {
+	this.drawFromCenter = function(context, screenWidth, screenHeight) {
 		context.fillStyle = this.color;
+		var screenPos = this.positionOnScreen(screenWidth, screenHeight);
 		context.fillRect(
-			this.x-this.side/2, this.y-this.side/2, this.side, this.side
+			screenPos.x,
+			screenPos.y,
+		 	this.side,
+			this.side
 		);
+	};
+
+	this.positionOnScreen = function(screenWidth, screenHeight) {
+		var x = (this.x-this.side/2) % screenWidth;
+		var y = (this.y-this.side/2) % screenHeight;
+		if (x < 0) {
+			x = screenWidth + x;
+		}
+		if (y < 0) {
+			y = screenHeight + y;
+		}
+
+		return {
+			x: x,
+			y: y
+		};
 	};
 };

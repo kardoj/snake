@@ -165,7 +165,7 @@ SNAKE.Level = function(settings) {
 	this.draw = function() {
 		level.clear();
 		for (var i in level.snake) {
-			level.snake[i].drawFromCenter(level.drawContext);
+			level.snake[i].drawFromCenter(level.drawContext, level.width, level.height);
 		}
 		for(i in level.baits) {
 			level.baits[i].drawFromCenter(level.drawContext);

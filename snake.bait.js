@@ -1,9 +1,9 @@
 // Kardo Jõeleht 2016
-SNAKE.Bait = function(xi, yi, sidei) {
+SNAKE.Bait = function(x, y, side) {
 	this.color = '#B3FFB3';
-	this.side = sidei;
-	this.x = xi;
-	this.y = yi;
+	this.side = side;
+	this.x = x;
+	this.y = y;
 
 	this.drawFromCenter = function(context) {
 		context.fillStyle = this.color;
