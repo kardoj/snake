@@ -5,6 +5,7 @@
 * Reduce movespeed (reset interval) on bait hit
 * Snake hit detection
 * Fullscreen 1920 * 1080 does not display 1920 * 1080
+* Bait not hit when snake has made a few over the screen trips (coordinates don't match)
 
 ## Is done
 

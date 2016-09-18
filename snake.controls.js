@@ -8,7 +8,7 @@ SNAKE.Controls = function() {
 
 	this.moveDirection = rightBtn;
 
-	this.getHeadPosition = function(currentX, currentY, step) {
+	this.getNewHeadPosition = function(currentX, currentY, step) {
 		switch (this.moveDirection) {
 			case rightBtn:
 				return {
@@ -40,7 +40,7 @@ SNAKE.Controls = function() {
 						  this.moveDirection == upBtn && direction == downBtn ||
 						  this.moveDirection == downBtn && direction == upBtn;
 			if (reverse) {
-				SNAKE.level.reverseSnake();
+				SNAKE.level.snake.reverse();
 			}
 			this.moveDirection = direction;
 			console.log('direction changed');

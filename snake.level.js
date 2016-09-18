@@ -5,28 +5,23 @@ SNAKE.Level = function(settings) {
 	this.controls = settings.controls;
 	this.drawContext = settings.drawContext;
 	this.height = settings.height;
-	this.initialPartCount = 3;
-	this.midX = SNAKE.width/2;
-	this.midY = SNAKE.height/2;
+	this.width = settings.width;
 	this.mover = null;
 	this.moveSpeed = 300;
 	this.minMoveSpeed = 50;
 	this.reduceSpeedOnBait = 10;
-	this.snakePartSide = 32;
 	this.moveStep = this.snakePartSide;
-	this.snake = [];
 	this.baits = [];
-	this.spaceBetweenParts = 3;
 	this.started = false;
-	this.width = settings.width;
 	this.baitSide = 64;
 	this.controllerTicks = 10; // Checks per second
 	this.controller = null;
+	this.snake = null;
 
 	this.start = function() {
 		if (!this.started) {
 			this.started = true;
-			this.setupSnake();
+			this.snake = new SNAKE.Snake(this.width, this.height);
 			this.controller = setInterval(function() { level.control(); }, level.controllerTicks);
 			this.mover = setInterval(function() { level.move(); }, level.moveSpeed);
 			requestAnimationFrame(this.draw);
@@ -40,7 +35,7 @@ SNAKE.Level = function(settings) {
 		if (this.started) {
 			console.log('level stopped');
 			this.started = false;
-			this.snake = [];
+			this.snake = null;
 			clearInterval(this.mover);
 			clearInterval(this.controller);
 		} else {
@@ -54,11 +49,10 @@ SNAKE.Level = function(settings) {
 		}
 		// Check if snake's head hit bait
 		for (var i in level.baits) {
-			var inRangeX = level.snake[0].x >= level.baits[i].x &&
-						   level.snake[0].x <= level.baits[i].x + level.baits[i].side;
-			console.log(inRangeX);
-			var inRangeY = level.snake[0].y >= level.baits[i].y &&
-						   level.snake[0].y <= level.baits[i].y + level.baits[i].side;
+			var inRangeX = level.snake.head().x >= level.baits[i].x &&
+						   level.snake.head().x <= level.baits[i].x + level.baits[i].side;
+			var inRangeY = level.snake.head().y >= level.baits[i].y &&
+						   level.snake.head().y <= level.baits[i].y + level.baits[i].side;
 			if (inRangeX && inRangeY) {
 				console.log('hit bait');
 				level.baits.pop();
@@ -66,45 +60,9 @@ SNAKE.Level = function(settings) {
 					level.moveSpeed -= level.reduceSpeedOnBait;
 					console.log('moveSpeed=' + level.moveSpeed);
 				}
-				level.increaseSnakeLength();
+				level.snake.increaseSnakeLength();
 			}
 		}
-	};
-
-	this.increaseSnakeLength = function() {
-		var part;
-		// Check two last parts and decide where to put the new part
-		if (this.snake[this.snake.length-1].x < this.snake[this.snake.length-2].x) {
-			// Add to right
-			part = new SNAKE.SnakePart(
-				this.snakePartSide,
-				this.snake[this.snake.length-1].x + this.snakePartSide + this.spaceBetweenParts,
-				this.snake[this.snake.length-1].y
-			);
-		} else if (this.snake[this.snake.length-1].x > this.snake[this.snake.length-2].x) {
-			// Add to left
-			part = new SNAKE.SnakePart(
-				this.snakePartSide,
-				this.snake[this.snake.length-1].x - this.snakePartSide - this.spaceBetweenParts,
-				this.snake[this.snake.length-1].y
-			);
-		} else if (this.snake[this.snake.length-1].y < this.snake[this.snake.length-2].y) {
-			// Add to bottom
-			part = new SNAKE.SnakePart(
-				this.snakePartSide,
-				this.snake[this.snake.length-1].x,
-				this.snake[this.snake.length-1].y + this.snakePartSide + this.spaceBetweenParts
-			);
-		} else if (this.snake[this.snake.length-1].y > this.snake[this.snake.length-2].y) {
-			// Add to top
-			part = new SNAKE.SnakePart(
-				this.snakePartSide,
-				this.snake[this.snake.length-1].x,
-				this.snake[this.snake.length-1].y - this.snakePartSide - this.spaceBetweenParts
-			);
-		}
-		this.snake.push(part);
-		console.log('snake length increased');
 	};
 
 	this.generateBait = function() {
@@ -114,41 +72,28 @@ SNAKE.Level = function(settings) {
 		console.log('bait generated');
 	};
 
-	this.setupSnake = function() {
-		var totalLength =
-				this.snakePartSide * this.initialPartCount +
-				(this.initialPartCount-1) * this.spaceBetweenParts;
-		var x = this.midX + totalLength/2 - this.snakePartSide; // Start from the right and distribute evenly
-		var y = this.midY - this.snakePartSide/2;
-		for (var i = 0; i < this.initialPartCount; i++) {
-			var part = new SNAKE.SnakePart(this.snakePartSide, x, y);
-			this.snake.push(part);
-			x -= this.snakePartSide + this.spaceBetweenParts;
-		}
-	};
-
 	this.move = function() {
 		// Moves the snake by one step
 		var oldPosition;
 		var previousPosition;
-		for (var i in this.snake) {
+		for (var i in this.snake.parts) {
 			oldPosition = {
-				x: this.snake[i].x,
-				y: this.snake[i].y
+				x: this.snake.parts[i].x,
+				y: this.snake.parts[i].y
 			};
 			if (i == 0) {
 				// Set new head location according to direction
-				var headPosition = this.controls.getHeadPosition(
-													this.snake[i].x,
-													this.snake[i].y,
-													this.snakePartSide + this.spaceBetweenParts
+				var headPosition = this.controls.getNewHeadPosition(
+													this.snake.parts[i].x,
+													this.snake.parts[i].y,
+													this.snake.side + this.snake.spaceBetweenParts
 												 );
-				this.snake[i].x = headPosition.x;
-				this.snake[i].y = headPosition.y;
+				this.snake.parts[i].x = headPosition.x;
+				this.snake.parts[i].y = headPosition.y;
 			} else {
 				// Move all other parts to previous' part's position
-				this.snake[i].x = previousPosition.x;
-				this.snake[i].y = previousPosition.y;
+				this.snake.parts[i].x = previousPosition.x;
+				this.snake.parts[i].y = previousPosition.y;
 			}
 			previousPosition = {
 				x: oldPosition.x,
@@ -157,17 +102,10 @@ SNAKE.Level = function(settings) {
 		}
 	};
 
-	this.reverseSnake = function() {
-		this.snake.reverse();
-		console.log('direction reversed');
-	};
-
 	this.draw = function() {
 		level.clear();
-		for (var i in level.snake) {
-			level.snake[i].draw(level.drawContext, level.width, level.height);
-		}
-		for(i in level.baits) {
+		level.snake.draw(level.drawContext);
+		for(var i in level.baits) {
 			level.baits[i].draw(level.drawContext);
 		}
 		if (level.started) requestAnimationFrame(level.draw);
