@@ -1,8 +1,7 @@
 // Kardo Jõeleht 2016
 SNAKE.Level = function(settings) {
 	var level = this;
-
-	this.controls = settings.controls;
+	
 	this.drawContext = settings.drawContext;
 	this.height = settings.height;
 	this.width = settings.width;
@@ -23,7 +22,7 @@ SNAKE.Level = function(settings) {
 			this.started = true;
 			this.snake = new SNAKE.Snake(this.width, this.height);
 			this.controller = setInterval(function() { level.control(); }, level.controllerTicks);
-			this.mover = setInterval(function() { level.move(); }, level.moveSpeed);
+			this.mover = setInterval(function() { level.snake.move(); }, level.moveSpeed);
 			requestAnimationFrame(this.draw);
 			console.log('level started');
 		} else {
@@ -70,36 +69,6 @@ SNAKE.Level = function(settings) {
 			new SNAKE.Bait(this.width, this.height, this.baitSide)
 		);
 		console.log('bait generated');
-	};
-
-	this.move = function() {
-		// Moves the snake by one step
-		var oldPosition;
-		var previousPosition;
-		for (var i in this.snake.parts) {
-			oldPosition = {
-				x: this.snake.parts[i].x,
-				y: this.snake.parts[i].y
-			};
-			if (i == 0) {
-				// Set new head location according to direction
-				var headPosition = this.controls.getNewHeadPosition(
-													this.snake.parts[i].x,
-													this.snake.parts[i].y,
-													this.snake.side + this.snake.spaceBetweenParts
-												 );
-				this.snake.parts[i].x = headPosition.x;
-				this.snake.parts[i].y = headPosition.y;
-			} else {
-				// Move all other parts to previous' part's position
-				this.snake.parts[i].x = previousPosition.x;
-				this.snake.parts[i].y = previousPosition.y;
-			}
-			previousPosition = {
-				x: oldPosition.x,
-				y: oldPosition.y
-			};
-		}
 	};
 
 	this.draw = function() {

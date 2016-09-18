@@ -31,6 +31,36 @@ SNAKE.Snake = function(screenWidth, screenHeight) {
 		}
 	};
 
+	this.move = function() {
+		// Moves the snake by one step
+		var oldPosition;
+		var previousPosition;
+		for (var i in this.parts) {
+			oldPosition = {
+				x: this.parts[i].x,
+				y: this.parts[i].y
+			};
+			if (i == 0) {
+				// Set new head location according to direction
+				var headPosition = SNAKE.controls.getNewHeadPosition(
+													this.parts[i].x,
+													this.parts[i].y,
+													this.side + this.spaceBetweenParts
+												 );
+				this.parts[i].x = headPosition.x;
+				this.parts[i].y = headPosition.y;
+			} else {
+				// Move all other parts to previous' part's position
+				this.parts[i].x = previousPosition.x;
+				this.parts[i].y = previousPosition.y;
+			}
+			previousPosition = {
+				x: oldPosition.x,
+				y: oldPosition.y
+			};
+		}
+	};
+
 	this.reverse = function() {
 		this.parts.reverse();
 	};

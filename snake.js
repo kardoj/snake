@@ -33,8 +33,7 @@ SNAKE = {
 		this.level = new SNAKE.Level({
 			drawContext: this.drawContext,
 			height: this.height,
-			width: this.width,
-			controls: this.controls
+			width: this.width
 		});
 	},
 
